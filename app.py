@@ -6,6 +6,7 @@ import jwt
 import urllib3
 from flask import Flask, request, escape
 import json  # Added for safe deserialization
+from werkzeug.security import generate_password_hash
 
 # Flask application
 app = Flask(__name__)
@@ -34,8 +35,8 @@ def login(username, password):
 
 # 3. **Sensitive Data Exposure**
 def store_password(password):
-    # Storing passwords using MD5, which is insecure
-    return hashlib.md5(password.encode()).hexdigest()
+    # Store passwords using a computationally expensive password hash (PBKDF2).
+    return generate_password_hash(password)
 
 # 4. **XML External Entities (XXE)**
 def parse_xml(xml_string):
